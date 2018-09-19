@@ -8,7 +8,7 @@ robot = CamJamKitRobot()
 
 # Max speed 1, 0 is stop
 def normalize_input(d):
-	for key in d:
+	for k in d:
 		
 		if d[k] > 1:
 			d[k] = 1
@@ -19,7 +19,7 @@ def normalize_input(d):
 	return d
 
 running = True
-movment = {'x':0,'y':0}
+movment = {'x':0.0,'y':0.0}
 inc = 0.5
 
 while running:
@@ -36,29 +36,29 @@ while running:
 
 	# Break down
 	if inp == 'b' :
-		movment = {'x':0,'y':0}
+		movment = {'x':0.0,'y':0.0}
 
 	# If value somehow gets over limit, reduce it to limit
 	movment = normalize_input(movment)
 
 	# Sends the robot forwards
-	if movment['y'] > 1:
-		if movment['x'] > 0:
+	elif movment['y'] > 0.0:
+		if movment['x'] > 0.0:
 			robot.forward( speed=movment['y'], curve_right=movment['x'] )
 		else:
 			robot.forward( speed=movment['y'], curve_left=abs(movment['x']) )
 	
 	# Sending robot backwards
-	elif movment['y'] < 1:
-		if movment['x'] > 0:
-			robot.backward( speed=movment['y'], curve_right=movment['x'] )
+	elif movment['y'] < 0.0:
+		if movment['x'] > 0.0:
+			robot.backward( speed=abs(movment['y']), curve_right=movment['x'] )
 		else:
-			robot.backward( speed=movment['y'], curve_left=abs(movment['x']) )
+			robot.backward( speed=abs(movment['y']), curve_left=abs(movment['x']) )
 
 	else:
-		if movment['x'] > 0:
+		if movment['x'] > 0.0:
 			robot.right(speed=movment['x'])
-		elif movment['x'] < 0:
+		elif movment['x'] < 0.0:
 			robot.left(speed=abs(movment['x']))
 
 	# Input is '' if connection stops
@@ -67,7 +67,7 @@ while running:
 		movment = {'x':0,'y':0}
 		running = False
 
-	speed_left, speed_right = robot.value()
+	speed_left, speed_right = robot.value
 	
 	print 'Motor speed: Left:{} , Right:{}'.format( speed_left , speed_right )
 
