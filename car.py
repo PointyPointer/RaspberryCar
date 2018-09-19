@@ -8,13 +8,13 @@ robot = CamJamKitRobot()
 
 # Max speed 1, 0 is stop
 def normalize_input(d):
-	for value in d.values():
+	for key in d:
 		
-		if value > 1:
-			value = 1
+		if d[k] > 1:
+			d[k] = 1
 		
-		elif value < -1:
-			value = -1
+		elif d[k] < -1:
+			d[k] = -1
 	
 	return d
 
@@ -25,13 +25,13 @@ inc = 0.5
 while running:
 	inp = network_controller.get_input()
 
-	if inp == 'w' and movment['y'] < 1:
+	if inp == 'w':
 		movment['y'] += inc
-	if inp == 'a' and movment['x'] > -1:
+	if inp == 'a':
 		movment['x'] -= inc
-	if inp == 'd' and movment['x'] > 1:
+	if inp == 'd':
 		movment['x'] += inc
-	if inp == 's' and movment['y'] > -1:
+	if inp == 's':
 		movment['y'] -= inc
 
 	# Break down
@@ -54,6 +54,12 @@ while running:
 			robot.backward( speed=movment['y'], curve_right=movment['x'] )
 		else:
 			robot.backward( speed=movment['y'], curve_left=abs(movment['x']) )
+
+	else:
+		if movment['x'] > 0:
+			robot.right(speed=movment['x'])
+		elif movment['x'] < 0:
+			robot.left(speed=abs(movment['x']))
 
 	# Input is '' if connection stops
 	if inp == 'c' or inp == '':
