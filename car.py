@@ -42,7 +42,7 @@ while running:
 	movment = normalize_input(movment)
 
 	# Sends the robot forwards
-	elif movment['y'] > 0.0:
+	if movment['y'] > 0.0:
 		if movment['x'] > 0.0:
 			robot.forward( speed=movment['y'], curve_right=movment['x'] )
 		else:
