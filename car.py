@@ -20,7 +20,7 @@ def normalize_input(d):
 
 running = True
 movment = {'x':0,'y':0}
-inc = 0.3
+inc = 0.35
 
 while running:
 	inp = network_controller.get_input()
@@ -37,16 +37,17 @@ while running:
 	# Break down
 	if inp == 'b' :
 		movment = {'x':0,'y':0}
+		robot.stop()
 
 	# If value somehow gets over limit, reduce it to limit
 	movment = normalize_input(movment)
 
 	# Robot loses grip if turn is more then 50%
 	# Focus more on turn
-	if abs(movment['x']) > 0.5:
-		if movment['x'] > 0.5
+	if abs(movment['x']) > 0.5 or movment['y'] == 0:
+		if movment['x'] > 0:
 			robot.right(speed=movment['x'])
-		elif movment['x'] < -0.5:
+		elif movment['x'] < -0:
 			robot.left(speed=abs(movment['x']))
 
 	else:
