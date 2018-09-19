@@ -19,8 +19,8 @@ def normalize_input(d):
 	return d
 
 running = True
-movment = {'x':0.0,'y':0.0}
-inc = 0.5
+movment = {'x':0,'y':0}
+inc = 0.3
 
 while running:
 	inp = network_controller.get_input()
@@ -36,30 +36,37 @@ while running:
 
 	# Break down
 	if inp == 'b' :
-		movment = {'x':0.0,'y':0.0}
+		movment = {'x':0,'y':0}
 
 	# If value somehow gets over limit, reduce it to limit
 	movment = normalize_input(movment)
 
-	# Sends the robot forwards
-	if movment['y'] > 0.0:
-		if movment['x'] > 0.0:
-			robot.forward( speed=movment['y'], curve_right=movment['x'] )
-		else:
-			robot.forward( speed=movment['y'], curve_left=abs(movment['x']) )
-	
-	# Sending robot backwards
-	elif movment['y'] < 0.0:
-		if movment['x'] > 0.0:
-			robot.backward( speed=abs(movment['y']), curve_right=movment['x'] )
-		else:
-			robot.backward( speed=abs(movment['y']), curve_left=abs(movment['x']) )
+	# Robot loses grip if turn is more then 50%
+	# Focus more on turn
+	if abs(movment['x']) > 0.5:
+		if movment['x'] > 0.5
+			robot.right(speed=movment['x'])
+		elif movment['x'] < -0.5:
+			robot.left(speed=abs(movment['x']))
 
 	else:
-		if movment['x'] > 0.0:
-			robot.right(speed=movment['x'])
-		elif movment['x'] < 0.0:
-			robot.left(speed=abs(movment['x']))
+		# Sends the robot forwards
+		if movment['y'] > 0:
+			if movment['x'] > 0:
+				robot.forward( speed=movment['y'], curve_right=movment['x'] )
+			else:
+				robot.forward( speed=movment['y'], curve_left=abs(movment['x']) )
+		
+		# Sending robot backwards
+		elif movment['y'] < 0:
+			if movment['x'] > 0:
+				robot.backward( speed=abs(movment['y']), curve_right=movment['x'] )
+			else:
+				robot.backward( speed=abs(movment['y']), curve_left=abs(movment['x']) )
+
+		# Make sure robot stops if no speed
+		else:
+			robot.stop()
 
 	# Input is '' if connection stops
 	if inp == 'c' or inp == '':
